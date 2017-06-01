@@ -6,7 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +16,23 @@ import kr.heythisway.contacts.domain.Data;
 
 public class ContactAcitivity extends AppCompatActivity {
 
+    RecyclerView recyclerList;
+    ContactAdapta adapta;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_acitivity);
 
-        for (Data data : getContacts()) {
-            Log.i("Contacts", "이름 = " + data.getName() + " 전화번호 = " + data.getTel());
-        }
-    }
+        List<Data> useDataBase = getContacts();
 
+        recyclerList = (RecyclerView) findViewById(R.id.recyclerList);
+        adapta = new ContactAdapta(this, useDataBase);
+        recyclerList.setAdapter(adapta);
+        recyclerList.setLayoutManager(new LinearLayoutManager(this));
+
+    }
     public List<Data> getContacts() {
         // 데이터베이스 혹은 content resolver를 통해 가져온 데이터를 적재할
         // 데이터 저장소를 먼저 정의한다.
